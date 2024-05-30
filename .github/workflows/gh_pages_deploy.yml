@@ -19,6 +19,8 @@ jobs:
         run: dotnet publish XDefiantWeaponStats/XDefiantWeaponStats.csproj -c Release -o release --nologo
       - name: Modify base-tag
         run: sed -i 's/<base href="\/" \/>/<base href="\/XDefiantWeaponStats\/" \/>/g' release/wwwroot/index.html
+      - name: Add .nojekyll file
+        run: touch release/wwwroot/.nojekyll
       - name: Commit wwwroot
         uses: JamesIves/github-pages-deploy-action@v4.6.1
         with:

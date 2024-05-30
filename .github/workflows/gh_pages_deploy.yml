@@ -1,0 +1,22 @@
+name: Deploy to GH Pages
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup .Net
+        uses: actions/setup-dotnet@v4
+        with: 
+          dotnet-version: 8
+      - name: Publish
+        run: dotnet publish XDefiantWeaponStats.sln -c Release -o release --nologo
+      - name: Commit wwwroot
+        uses: JamesIves/github-pages-deploy-action@4.6.1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: release/wwwroot

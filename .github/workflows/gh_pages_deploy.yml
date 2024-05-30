@@ -15,7 +15,7 @@ jobs:
       - name: Publish
         run: dotnet publish XDefiantWeaponStats.sln -c Release -o release --nologo
       - name: Commit wwwroot
-        uses: JamesIves/github-pages-deploy-action@4.6.1
+        uses: JamesIves/github-pages-deploy-action@v4.6.1
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages

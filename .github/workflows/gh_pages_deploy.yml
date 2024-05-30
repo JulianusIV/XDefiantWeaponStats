@@ -13,10 +13,12 @@ jobs:
         uses: actions/setup-dotnet@v4
         with: 
           dotnet-version: 8
-      - name: install workload
+      - name: Install wasm-tools
         run: dotnet workload install wasm-tools
       - name: Publish
         run: dotnet publish XDefiantWeaponStats/XDefiantWeaponStats.csproj -c Release -o release --nologo
+      - name: Modify base-tag
+        run: sed -i 's/<base href="\/" \/>/<base href="\/XDefiantWeaponStats\/" \/>/g' release/wwwroot/index.html
       - name: Commit wwwroot
         uses: JamesIves/github-pages-deploy-action@v4.6.1
         with:

@@ -13,7 +13,7 @@ jobs:
         with: 
           dotnet-version: 8
       - name: Publish
-        run: dotnet publish XDefiantWeaponStats.sln -c Release -o release --nologo
+        run: dotnet publish XDefiantWeaponStats/XDefiantWeaponStats.csproj -c Release -o release --nologo
       - name: Commit wwwroot
         uses: JamesIves/github-pages-deploy-action@v4.6.1
         with:

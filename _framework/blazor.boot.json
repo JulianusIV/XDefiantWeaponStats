@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "XDefiantWeaponStats",
   "resources": {
-    "hash": "sha256-2q02fN9CAWWiqoY/E1JR+IEHP3XQZ/zCXIOwPsGOaRA=",
+    "hash": "sha256-rcVAAdPJ0NyUlFLVVL9j1JK9LjSGEFafzs3QMr4tb2I=",
     "jsModuleNative": {
       "dotnet.native.8.0.6.ryg2uwqmto.js": "sha256-nDg77XhopI+loYndF6dAxEKdDe7Yzg1fQq1wh2BKHic="
     },
@@ -63,7 +63,7 @@
       "System.Threading.Tasks.Parallel.wasm": "sha256-nqF6fvZnIiEIzfteQU3AXyvAyQlNIlXrRNMh0Tkx9PY=",
       "System.Threading.wasm": "sha256-+g0EwikofDF2kXxMs5SRo5vh8eTQ93Q2TU5CzrZ0a5I=",
       "System.wasm": "sha256-Y9uCkR3QxS+bIxEZgdgtX3LSZA6Ou0TsiIMqNOCbUPE=",
-      "XDefiantWeaponStats.wasm": "sha256-8J7UMH5b2BJayYUM51oIpvvRfcH9yx2jaVktV4pyRM8="
+      "XDefiantWeaponStats.wasm": "sha256-kWJE8UAo9Eu3+CCa+1DH1kwd4XWazbGOOUhd32RgxdA="
     }
   },
   "cacheBootResources": true,

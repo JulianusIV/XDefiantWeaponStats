@@ -227,7 +227,7 @@
                 var critSTKPhantom = new List<int>();
                 for (int i = 0; i < ranges.Count; i++)
                 {
-                    var msPerRound = (30.0 / (gun.Rof / 60) / 30) * 1000;
+                    var msPerRound = 1.0 / ((gun.Rof / 60.0) / 1000.0);
 
                     baseSTK.Add((int)Math.Round(100.0 / (baseDmg[i] * gun.ShotsPerTrigger), MidpointRounding.ToPositiveInfinity));
                     baseSTKPhantom.Add((int)Math.Round(120.0 / (baseDmg[i] * gun.ShotsPerTrigger), MidpointRounding.ToPositiveInfinity));

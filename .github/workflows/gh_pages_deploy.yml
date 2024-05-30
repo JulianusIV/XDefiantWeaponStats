@@ -2,6 +2,7 @@ name: Deploy to GH Pages
 on:
   push:
     branches: [ master ]
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -19,6 +20,5 @@ jobs:
       - name: Commit wwwroot
         uses: JamesIves/github-pages-deploy-action@v4.6.1
         with:
-          GITHUB_TOKEN: ${{secrets.GH_TOKEN}}
-          BRANCH: gh-pages
-          FOLDER: release/wwwroot
+          branch: gh-pages
+          folder: release/wwwroot

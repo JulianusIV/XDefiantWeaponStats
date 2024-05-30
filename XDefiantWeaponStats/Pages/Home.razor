@@ -28,30 +28,30 @@
     <ul style="list-style-type: none;">
         <li>
             <label>
-                <input type="radio" name="graph_select" @onchange="@(() => graphSelector = GraphSelector.Dmg)" checked/>
+                <input type="radio" name="graph_select" @onchange="@(() => {graphSelector = GraphSelector.Dmg; UpdateView();})" checked/>
                 Damage
             </label>
         </li>
         <li>
             <label>
-                <input type="radio" name="graph_select" @onchange="@(() => graphSelector = GraphSelector.Crit)" />
+                <input type="radio" name="graph_select" @onchange="@(() => {graphSelector = GraphSelector.Crit; UpdateView();})" />
                 Crit
             </label>
         </li>
         <li>
             <label>
-                <input type="radio" name="graph_select" @onchange="@(() => graphSelector = GraphSelector.STK)" />
+                <input type="radio" name="graph_select" @onchange="@(() => {graphSelector = GraphSelector.STK; UpdateView();})" />
                 STK
             </label>
         </li>
         <li>
             <label>
-                <input type="radio" name="graph_select" @onchange="@(() => graphSelector = GraphSelector.TTK)"  />
+                <input type="radio" name="graph_select" @onchange="@(() => {graphSelector = GraphSelector.TTK; UpdateView();})" />
                 TTK
             </label>
         </li>
     </ul>
-    <p>Show TTK Graphs</p>
+    <p>Show TTK/STK Graphs</p>
     <ul style="list-style-type: none;">
         <li>
             <label>
@@ -81,14 +81,8 @@
 </div>
 
 <div style="overflow: hidden">
-    <div class="Scrollable" style="display:@(dmgSelected ? "block" : "none");">
-        <BlazorPlot @ref=RangeDamagePlot Style="width: 75vw; height: 100%" />
-    </div>
-    <div class="Scrollable" style="display:@(critSelected ? "block" : "none");">
-        <BlazorPlot @ref=RangeCritPlot Style="width: 75vw; height: 100%" />
-    </div>
-    <div class="Scrollable" style="display:@(ttkSelected ? "block" : "none");">
-        <BlazorPlot @ref=RangeTTKPlot Style="width: 75vw; height: 100%" />
+    <div class="Scrollable">
+        <BlazorPlot @ref=StatPlot Style="width: 75vw; height: 100%" />
     </div>
     <script type="text/javascript">
         $('.Scrollable').on('DOMMouseScroll mousewheel', function (ev) {
@@ -158,9 +152,7 @@
     }
     private bool _showCritPhantomTTK = true;
 
-    BlazorPlot RangeDamagePlot { get; set; } = new();
-    BlazorPlot RangeCritPlot { get; set; } = new();
-    BlazorPlot RangeTTKPlot { get; set; } = new();
+    BlazorPlot StatPlot { get; set; } = new();
 
     void CheckBoxClicked(string weaponClass, string gunName, object? checkedValue)
     {
@@ -173,9 +165,43 @@
 
     void UpdateView()
     {
-        RangeDamagePlot.Plot.Clear();
-        RangeCritPlot.Plot.Clear();
-        RangeTTKPlot.Plot.Clear();
+        StatPlot.Plot.Clear();
+        StatPlot.Plot.Axes.Rules.Clear();
+        switch (graphSelector)
+        {
+            case GraphSelector.Dmg:
+                StatPlot.Plot.Axes.Left.Label.Text = "Damage";
+                StatPlot.Plot.Axes.Rules.Add(new MaximumBoundary(
+                    StatPlot.Plot.Axes.Bottom,
+                    StatPlot.Plot.Axes.Left,
+                    new AxisLimits(0, 300, 0, 140)));
+                StatPlot.Plot.Axes.SetLimits(0, 300, 0, 140);
+                break;
+            case GraphSelector.Crit:
+                StatPlot.Plot.Axes.Left.Label.Text = "Crit Damage";
+                StatPlot.Plot.Axes.Rules.Add(new MaximumBoundary(
+                    StatPlot.Plot.Axes.Bottom,
+                    StatPlot.Plot.Axes.Left,
+                    new AxisLimits(0, 300, 0, 140)));
+                StatPlot.Plot.Axes.SetLimits(0, 300, 0, 140);
+                break;
+            case GraphSelector.STK:
+                StatPlot.Plot.Axes.Left.Label.Text = "Shots to Kill";
+                StatPlot.Plot.Axes.Rules.Add(new MaximumBoundary(
+                    StatPlot.Plot.Axes.Bottom,
+                    StatPlot.Plot.Axes.Left,
+                    new AxisLimits(0, 300, 0, 20)));
+                StatPlot.Plot.Axes.SetLimits(0, 300, 0, 20);
+                break;
+            case GraphSelector.TTK:
+                StatPlot.Plot.Axes.Left.Label.Text = "Time to Kill";
+                StatPlot.Plot.Axes.Rules.Add(new MaximumBoundary(
+                    StatPlot.Plot.Axes.Bottom,
+                    StatPlot.Plot.Axes.Left,
+                    new AxisLimits(0, 300, 0, 1500)));
+                StatPlot.Plot.Axes.SetLimits(0, 300, 0, 1500);
+                break;
+        }
 
         foreach(var weaponClass in GunlistModel.JsonObject)
         {
@@ -194,102 +220,112 @@
                 var baseTTKPhantom = new List<int>();
                 var critTTK = new List<int>();
                 var critTTKPhantom = new List<int>();
+
+                var baseSTK = new List<int>();
+                var baseSTKPhantom = new List<int>();
+                var critSTK = new List<int>();
+                var critSTKPhantom = new List<int>();
                 for (int i = 0; i < ranges.Count; i++)
                 {
                     var msPerRound = (30.0 / (gun.Rof / 60) / 30) * 1000;
 
-                    int baseSTK = (int)Math.Round(100.0 / (baseDmg[i] * gun.ShotsPerTrigger), MidpointRounding.ToPositiveInfinity);
-                    int basePhantomSTK = (int)Math.Round(120.0 / (baseDmg[i] * gun.ShotsPerTrigger), MidpointRounding.ToPositiveInfinity);
-                    int critSTK = (int)Math.Round(100.0 / (critDmg[i] * gun.ShotsPerTrigger), MidpointRounding.ToPositiveInfinity);
-                    int critPhantomSTK = (int)Math.Round(120.0 / (critDmg[i] * gun.ShotsPerTrigger), MidpointRounding.ToPositiveInfinity);
+                    baseSTK.Add((int)Math.Round(100.0 / (baseDmg[i] * gun.ShotsPerTrigger), MidpointRounding.ToPositiveInfinity));
+                    baseSTKPhantom.Add((int)Math.Round(120.0 / (baseDmg[i] * gun.ShotsPerTrigger), MidpointRounding.ToPositiveInfinity));
+                    critSTK.Add((int)Math.Round(100.0 / (critDmg[i] * gun.ShotsPerTrigger), MidpointRounding.ToPositiveInfinity));
+                    critSTKPhantom.Add((int)Math.Round(120.0 / (critDmg[i] * gun.ShotsPerTrigger), MidpointRounding.ToPositiveInfinity));
 
-                    baseTTK.Add((int)Math.Round(baseSTK * msPerRound));
+                    baseTTK.Add((int)Math.Round(baseSTK[i] * msPerRound));
 
-                    baseTTKPhantom.Add((int)Math.Round(basePhantomSTK * msPerRound));
+                    baseTTKPhantom.Add((int)Math.Round(baseSTKPhantom[i] * msPerRound));
 
-                    critTTK.Add((int)Math.Round(critSTK * msPerRound));
+                    critTTK.Add((int)Math.Round(critSTK[i] * msPerRound));
 
-                    critTTKPhantom.Add((int)Math.Round(critPhantomSTK * msPerRound));
+                    critTTKPhantom.Add((int)Math.Round(critSTKPhantom[i] * msPerRound));
                 }
 
                 if (dmgSelected)
                 {
-                    var rangeDamageScatter = RangeDamagePlot.Plot.Add.Scatter(ranges.ToArray(), baseDmg.ToArray());
+                    var rangeDamageScatter = StatPlot.Plot.Add.Scatter(ranges.ToArray(), baseDmg.ToArray());
                     rangeDamageScatter.ConnectStyle = ConnectStyle.StepVertical;
                     rangeDamageScatter.LegendText = gun.Name!;
                 }
 
                 if (critSelected)
                 {
-                    var rangeCritScatter = RangeCritPlot.Plot.Add.Scatter(ranges.ToArray(), critDmg.ToArray());
+                    var rangeCritScatter = StatPlot.Plot.Add.Scatter(ranges.ToArray(), critDmg.ToArray());
                     rangeCritScatter.ConnectStyle = ConnectStyle.StepVertical;
                     rangeCritScatter.LegendText = gun.Name!;
+                }
+
+                if (stkSelected)
+                {
+                    if (showBaseTTK)
+                    {
+                        var rangeSTKScatter = StatPlot.Plot.Add.Scatter(ranges.ToArray(), baseSTK.ToArray());
+                        rangeSTKScatter.ConnectStyle = ConnectStyle.StepVertical;
+                        rangeSTKScatter.LegendText = $"{gun.Name} Base STK";
+                    }
+
+                    if (showBasePhantomTTK)
+                    {
+                        var rangeSTKPhantomScatter = StatPlot.Plot.Add.Scatter(ranges.ToArray(), baseSTKPhantom.ToArray());
+                        rangeSTKPhantomScatter.ConnectStyle = ConnectStyle.StepVertical;
+                        rangeSTKPhantomScatter.LegendText = $"{gun.Name} Base STK vs Phantom";
+                    }
+
+                    if (showCritTTK)
+                    {
+                        var rangeSTKCritScatter = StatPlot.Plot.Add.Scatter(ranges.ToArray(), critSTK.ToArray());
+                        rangeSTKCritScatter.ConnectStyle = ConnectStyle.StepVertical;
+                        rangeSTKCritScatter.LegendText = $"{gun.Name} Optimal STK";
+                    }
+
+                    if (showCritPhantomTTK)
+                    {
+                        var rangeSTKCritPhantomScatter = StatPlot.Plot.Add.Scatter(ranges.ToArray(), critSTKPhantom.ToArray());
+                        rangeSTKCritPhantomScatter.ConnectStyle = ConnectStyle.StepVertical;
+                        rangeSTKCritPhantomScatter.LegendText = $"{gun.Name} Optimal STK vs Phantom";
+                    }
                 }
 
                 if (ttkSelected)
                 {
                     if (showBaseTTK)
                     {
-                        var rangeTTKScatter = RangeTTKPlot.Plot.Add.Scatter(ranges.ToArray(), baseTTK.ToArray());
+                        var rangeTTKScatter = StatPlot.Plot.Add.Scatter(ranges.ToArray(), baseTTK.ToArray());
                         rangeTTKScatter.ConnectStyle = ConnectStyle.StepVertical;
                         rangeTTKScatter.LegendText = $"{gun.Name} Base TTK";
                     }
 
                     if (showBasePhantomTTK)
                     {
-                        var rangeTTKPhantomScatter = RangeTTKPlot.Plot.Add.Scatter(ranges.ToArray(), baseTTKPhantom.ToArray());
+                        var rangeTTKPhantomScatter = StatPlot.Plot.Add.Scatter(ranges.ToArray(), baseTTKPhantom.ToArray());
                         rangeTTKPhantomScatter.ConnectStyle = ConnectStyle.StepVertical;
                         rangeTTKPhantomScatter.LegendText = $"{gun.Name} Base TTK vs Phantom";
                     }
 
                     if (showCritTTK)
                     {
-                        var rangeTTKCritScatter = RangeTTKPlot.Plot.Add.Scatter(ranges.ToArray(), critTTK.ToArray());
+                        var rangeTTKCritScatter = StatPlot.Plot.Add.Scatter(ranges.ToArray(), critTTK.ToArray());
                         rangeTTKCritScatter.ConnectStyle = ConnectStyle.StepVertical;
                         rangeTTKCritScatter.LegendText = $"{gun.Name} Optimal TTK";
                     }
 
                     if (showCritPhantomTTK)
                     {
-                        var rangeTTKCritPhantomScatter = RangeTTKPlot.Plot.Add.Scatter(ranges.ToArray(), critTTKPhantom.ToArray());
+                        var rangeTTKCritPhantomScatter = StatPlot.Plot.Add.Scatter(ranges.ToArray(), critTTKPhantom.ToArray());
                         rangeTTKCritPhantomScatter.ConnectStyle = ConnectStyle.StepVertical;
                         rangeTTKCritPhantomScatter.LegendText = $"{gun.Name} Optimal TTK vs Phantom";
                     }
                 }
             }
         }
-        RangeDamagePlot.Refresh();
-        RangeCritPlot.Refresh();
-        RangeTTKPlot.Refresh();
+        StatPlot.Refresh();
     }
 
     protected override void OnAfterRender(bool firstRender)
     {
-        RangeDamagePlot.Plot.Axes.Bottom.Label.Text = "Distance (m)";
-        RangeDamagePlot.Plot.Axes.Left.Label.Text = "Damage";
-        RangeDamagePlot.Plot.Axes.Rules.Add(new MaximumBoundary(
-            RangeDamagePlot.Plot.Axes.Bottom,
-            RangeDamagePlot.Plot.Axes.Left,
-            new AxisLimits(0, 300, 0, 140)));
-        RangeDamagePlot.Plot.Axes.SetLimits(0, 300, 0, 140);
-        RangeDamagePlot.Plot.Style.DarkMode();
-
-        RangeCritPlot.Plot.Axes.Bottom.Label.Text = "Distance (m)";
-        RangeCritPlot.Plot.Axes.Left.Label.Text = "Crit Damage";
-        RangeCritPlot.Plot.Axes.Rules.Add(new MaximumBoundary(
-            RangeCritPlot.Plot.Axes.Bottom,
-            RangeCritPlot.Plot.Axes.Left,
-            new AxisLimits(0, 300, 0, 140)));
-        RangeCritPlot.Plot.Axes.SetLimits(0, 300, 0, 140);
-        RangeCritPlot.Plot.Style.DarkMode();
-
-        RangeTTKPlot.Plot.Axes.Bottom.Label.Text = "Distance (m)";
-        RangeTTKPlot.Plot.Axes.Left.Label.Text = "Time to Kill (ms)";
-        RangeTTKPlot.Plot.Axes.Rules.Add(new MaximumBoundary(
-            RangeTTKPlot.Plot.Axes.Bottom,
-            RangeTTKPlot.Plot.Axes.Left,
-            new AxisLimits(0, 300, 0, 1500)));
-        RangeTTKPlot.Plot.Axes.SetLimits(0, 300, 0, 1500);
-        RangeTTKPlot.Plot.Style.DarkMode();
+        StatPlot.Plot.Axes.Bottom.Label.Text = "Distance (m)";
+        StatPlot.Plot.Style.DarkMode();
     }
 }

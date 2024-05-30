@@ -13,7 +13,7 @@ jobs:
         with: 
           dotnet-version: 8
       - name: install workload
-        run: dotnet workload restore XDefiantWeaponStats/XDefiantWeaponStats.csproj
+        run: dotnet workload install wasm-tools
       - name: Publish
         run: dotnet publish XDefiantWeaponStats/XDefiantWeaponStats.csproj -c Release -o release --nologo
       - name: Commit wwwroot

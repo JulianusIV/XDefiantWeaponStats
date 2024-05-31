@@ -265,7 +265,7 @@
                 {
                     if (gun.ShotsPerTrigger > 1 && GunlistModel.JsonObject.Aggregate(0, (x, n) => x + n.Guns.Count(y => y.Checked)) == 1)
                     {
-                        for (int i = 0; i < 5; i++)
+                        for (int i = 1; i < 7; i++)
                         {
                             StatPlot.Plot.Add.HorizontalLine(
                                 gun.ShotsPerTrigger * i, 

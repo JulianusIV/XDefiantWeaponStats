@@ -76,7 +76,43 @@ code {
     color: #c02d76;
 }
 
-.Scrollable {
-    width: 75vw;
-    margin-bottom: 1rem;
+.custom-radio-input {
+    display: none;
+}
+
+.custom-radio-content {
+    user-select: none;
+    margin-left: 5px;
+    margin-right: 5px;
+    background: var(--nc-bg-2);
+    padding: 0.5rem;
+    border: 1px solid var(--nc-bg-3);
+    border-top-right-radius: 4px;
+    border-top-left-radius: 4px;
+    width: 90px;
+    display: inline-block;
+    text-align: center;
+    border-bottom: none;
+}
+
+.custom-radio-input:checked ~ .custom-radio-content {
+    color: var(--nc-lk-2);
+    background: var(--nc-bg-3);
+}
+
+.custom-check-input {
+    display: none;
+}
+
+.custom-check-content {
+    user-select: none;
+    margin-left: 5px;
+    margin-right: 5px;
+    border: 1px solid var(--nc-ac-1);
+    border-radius: 10px;
+    padding: 0.75rem;
+}
+
+.custom-check-input:checked ~ .custom-check-content {
+    background: var(--nc-ac-1)
 }

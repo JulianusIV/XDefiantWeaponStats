@@ -265,16 +265,16 @@
                     critSTKPhantom.Add((int)Math.Round(120.0 / critDmg[i], MidpointRounding.ToPositiveInfinity));
 
                     var burstToKill = (int)Math.Round(baseSTK[i] / (double)gun.ShotsPerTrigger, MidpointRounding.ToPositiveInfinity);
-                    baseTTK.Add((int)Math.Round(burstToKill - 1 * msPerRound));
+                    baseTTK.Add((int)Math.Round((burstToKill - 1) * msPerRound));
 
                     burstToKill = (int)Math.Round(baseSTKPhantom[i] / (double)gun.ShotsPerTrigger, MidpointRounding.ToPositiveInfinity);
-                    baseTTKPhantom.Add((int)Math.Round(burstToKill - 1 * msPerRound));
+                    baseTTKPhantom.Add((int)Math.Round((burstToKill - 1) * msPerRound));
 
                     burstToKill = (int)Math.Round(critSTK[i] / (double)gun.ShotsPerTrigger, MidpointRounding.ToPositiveInfinity);
-                    critTTK.Add((int)Math.Round(burstToKill - 1 * msPerRound));
+                    critTTK.Add((int)Math.Round((burstToKill - 1) * msPerRound));
 
                     burstToKill = (int)Math.Round(critSTKPhantom[i] / (double)gun.ShotsPerTrigger, MidpointRounding.ToPositiveInfinity);
-                    critTTKPhantom.Add((int)Math.Round(burstToKill - 1 * msPerRound));
+                    critTTKPhantom.Add((int)Math.Round((burstToKill - 1) * msPerRound));
                 }
 
                 if (dmgSelected)

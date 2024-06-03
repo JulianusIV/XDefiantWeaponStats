@@ -17,7 +17,11 @@
 @code {
     private void NavigateHome()
     {
+#if DEBUG
         Navigation.NavigateTo("/");
+#else
+        Navigation.NavigateTo("/XDefiantWeaponStats/");
+#endif
     }
 
     private void NavigateInfo()

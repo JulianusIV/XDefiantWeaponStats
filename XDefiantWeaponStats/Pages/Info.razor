@@ -1,38 +1,91 @@
 ﻿@page "/info"
 
-<script>
-    document.getElementsByTagName('body')[0].style = '';
-</script>
+<div style="max-width: 750px; align-self: center">
+    <h1>Damage multiplier mechanics</h1>
+    <p>
+        In XDefiant hits to the limbs do not do reduced damage, 
+        in fact with most guns the damage is the same no matter where you hit (outside of headshots).
+    </p>
+    <p style="margin-bottom: 0;">
+        This works a bit different on marksman rifles and sniper rifles:
+    </p>
+    <p style="margin-bottom: 0;">
+        Hits to the lower body or limbs deal the baseline damage,
+        that you can find in the weapon's in game stat page.
+    </p>
+    <p>
+        Hits to the upper body, (in and slightly below the neck) will deal an increased amount of damage,
+        and headshots obviously deal the most damage.
+    </p>
+    <p>
+        This behaviour is (currently) only found on marksman rifles and snipers.
+    </p>
+    <h3 style="text-align: center;">Increased damage areas:</h3>
+    <div style="display: flex; justify-content: center; margin-top: 1rem;">
+        <div style="display: flex; flex-direction: column; align-items: center; margin-right: 4rem;">
+            <p style="text-align: center;">M44 + marksman rifles</p>
+            <img src="images/m44.png" height="255" width="152" />
+        </div>
+        <div style="display: flex; flex-direction:column; align-items: center;">
+            <p style="text-align: center;">TAC-50</p>
+            <img src="images/tac-50.png" height="255" width="152"/>
+        </div>
+    </div>
 
-<h1>Damage multiplier mechanics</h1>
-<p>
-    In XDefiant hits to the limbs do not do reduced damage, 
-    in fact with most guns the damage is the same no matter where you hit (outside of headshots).
-</p>
-<p style="margin-bottom: 0;">
-    This works a bit different on marksman rifles and sniper rifles:
-</p>
-<p style="margin-bottom: 0;">
-    Hits to the lower body or limbs deal the baseline damage,
-    that you can find in the weapon's in game stat page.
-</p>
-<p>
-    Hits to the upper body, (in and slightly below the neck) will deal an increased amount of damage,
-    and headshots obviously deal the most damage.
-</p>
-<p>
-    This behaviour is (currently) only found on marksman rifles and snipers.
-</p>
-<h3 style="text-align: center;">Increased damage areas:</h3>
-<div style="display: flex; justify-content: center; margin-top: 1rem;">
-    <div style="display: flex; flex-direction: column; align-items: center; margin-right: 4rem;">
-        <p style="text-align: center;">M44 + marksman rifles</p>
-        <img src="images/m44.png" height="255" width="152" />
-    </div>
-    <div style="display: flex; flex-direction:column; align-items: center;">
-        <p style="text-align: center;">TAC-50</p>
-        <img src="images/tac-50.png" height="255" width="152"/>
-    </div>
+    <h1 style="margin-top: 2rem">The stats displayed on this page</h1>
+    <h2>Damage</h2>
+    <p>
+        This graph displays the damage to the body that the selected weapon does (Base Damage),
+        as well as the damage the weapon(s) deal when hitting the head (Crit Damage).
+    </p>
+    <p>
+        The damage graph does not (yet?) include the increased damage marksman rifles deal to the upper body, which is explained in more detail above.
+    </p>
+    <p>
+        Both graphs can be toggled on or off via the buttons at the bottom of the page.
+    </p>
+    <h2 style="border:none; margin-bottom: 0;">STK - Shots To Kill</h2>
+    <h2>TTK - Time To Kill</h2>
+    <p>
+        These graphs display the amount of shots it takes for the selected weapon(s) to kill a target, and the time it takes, using the weapons default firerate.
+    </p>
+    <ul>
+        <li>Base STK/TTK: Bodyshots only vs 100hp target</li>
+        <li>Base Phantom STK/TTK: Bodyshots only vs 120hp target</li>
+        <li>Optimal STK/TTK: Headshots only vs 100hp target</li>
+        <li>Optimal Phantom STK/TTK: Headshots only vs 120hp target</li>
+    </ul>
+    <p>
+        Each graph can again be toggled on or off using the buttons at the bottom of the page.
+    </p>
+    <p>
+        When selecting a burst fire weapon the amount of shots it fires per burst will also be marked in the STK plot using dotted, horizontal lines.
+    </p>
+    <p>
+        The time it takes for a burst fire weapon to fully fire a burst is currently not included in the TTK calculation, this is planned to be included.
+    </p>
+
+    <h1>
+        Attachments and faction abilities
+    </h1>
+    <p>
+        I plan on adding the attachments that change range, damage and firerate as additional options to select,
+        but due to the UI getting a bit crowded already this might take a bit.
+    </p>
+    <p>
+        Similarly I also plan to include faction abilities that have an effect on the displayed stats (currently only Cleaners burn damage), 
+        in this case here the calculation gets a bit tricky, as the mechanics are a bit odd, with damage ticking 4 times on a single shot,
+        ticking 5 times on a burst, and ticking more often if there is sufficient delay between the shots.
+    </p>
+    <h1>
+        Other plans
+    </h1>
+    <p>
+        I want to also include a graph to view accuracy adjusted STK/TTK values, meaning how many shots you have to hit, 
+        if you only hit for example 30% headshots, and what the time to kill with this lower than optimal accuracy would be.
+        I already have the algorithm for this, as i did something similar before, 
+        I just need to figure out how to properly take the user input and display the graphs.
+    </p>
+
+    <h1 style="text-align: center; margin-top: 2rem;">WIP...</h1>
 </div>
-
-<h1 style="text-align: center; margin-top: 2rem;">WIP...</h1>

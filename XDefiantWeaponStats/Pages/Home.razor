@@ -6,10 +6,6 @@
 
 @inject IJSRuntime JS
 
-<script>
-    document.getElementsByTagName('body')[0].style = 'max-width: none;';
-</script>
-
 <div style="display: flex; flex: 1 1 auto; min-height: 0">
     <div style="width: 250px; overflow: auto; min-height: 0; margin-right: 1rem; padding: 1rem; border: 1px solid var(--nc-bg-3); border-radius: 10px; flex: 0 1 auto;">
         @foreach(var weaponClass in GunlistModel.JsonObject)
@@ -74,25 +70,25 @@
                 <div>
                     <input class="custom-check-input" type="checkbox" id="basettk_checkbox" @bind="showBaseTTK" />
                     <label class="custom-check-content" for="basettk_checkbox">
-                        Base TTK
+                        @(ttkSelected ? "Base TTK" : "Base STK")
                     </label>
                 </div>
                 <div>
                     <input class="custom-check-input" type="checkbox" id="basephantomttk_checkbox" @bind="showBasePhantomTTK" />
                     <label class="custom-check-content" for="basephantomttk_checkbox">
-                        Base Phantom TTK
+                        @(ttkSelected ? "Base Phantom TTK" : "Base Phantom STK")
                     </label>
                 </div>
                 <div>
                     <input class="custom-check-input" type="checkbox" id="critttk__checkbox" @bind="showCritTTK" />
                     <label class="custom-check-content" for="critttk__checkbox">
-                        Optimal TTK
+                        @(ttkSelected ? "Optimal TTK" : "Optimal STK")
                     </label>
                 </div>
                 <div>
                     <input class="custom-check-input" type="checkbox" id="critphantomttk_checkbox" @bind="showCritPhantomTTK" />
                     <label class="custom-check-content" for="critphantomttk_checkbox">
-                        Optimal Phantom TTK
+                        @(ttkSelected ? "Optimal Phantom TTK" : "Optimal Phantom STK")
                     </label>
                 </div>
             }

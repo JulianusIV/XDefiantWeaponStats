@@ -13,4 +13,8 @@
     <PackageReference Include="ScottPlot.Blazor" Version="5.0.34" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\images\" />
+  </ItemGroup>
+
 </Project>

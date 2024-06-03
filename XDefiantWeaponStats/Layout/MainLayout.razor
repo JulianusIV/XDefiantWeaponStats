@@ -1,3 +1,27 @@
 ﻿@inherits LayoutComponentBase
+@inject NavigationManager Navigation
+
+<header style="flex: 0 1 auto;">
+    <h4>
+        XDefiant Weapon Stats
+    </h4>
+    <nav style="margin-top: 1rem">
+        <button @onclick="NavigateHome" class="Navbutton">Home</button>
+        |
+        <button @onclick="NavigateInfo" class="Navbutton">Info</button>
+    </nav>
+</header>
 
 @Body
+
+@code {
+    private void NavigateHome()
+    {
+        Navigation.NavigateTo("/");
+    }
+
+    private void NavigateInfo()
+    {
+        Navigation.NavigateTo("info");
+    }
+}
